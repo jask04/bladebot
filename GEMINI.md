@@ -27,10 +27,12 @@ Create a Discord bot "Blade Bot" for the "blade*" server to manage League of Leg
 ## Implementation Phases
 
 ### Phase 1: Setup & Basic Bot
-- [ ] Initialize Project & Git Repository.
-- [ ] specific `GEMINI.md` context setup.
-- [ ] Bot configuration (Token, App ID).
+- [x] Initialize Project & Git Repository.
+- [x] specific `GEMINI.md` context setup.
+- [x] Bot configuration (Token, App ID).
 - [ ] Basic "Ping/Pong" command to verify connectivity.
+- [ ] Implement Text Command Handler (Prefix: `*`).
+- [ ] Create `*help` command.
 
 ### Phase 2: Scheduling System
 - [ ] Command: `/schedule <type> <time>` (e.g., `/schedule type:aram time:20:00`).
@@ -52,10 +54,12 @@ Create a Discord bot "Blade Bot" for the "blade*" server to manage League of Leg
 - [ ] Final testing and deployment instructions.
 
 ## Questions / Clarifications
-- **ARAM Count:** You mentioned 4 players for ARAM. ARAM is typically 5v5 (10 players). Is 4 correct (maybe 2v2)?
+- **ARAM Count:** User confirmed custom games on Howling Abyss (2v2, 3v3, 4v4, or 5v5). Minimum threshold set to 4 players.
 - **Draft Tool:** `draftlol.dawe.gg` seems to not have a public API. We will attempt to reverse engineer the creation request or use a headless browser.
 - **Hosting:** Where will this bot run? (Assuming local for now).
 
 ## Current State
 - Project Initialized.
 - `GEMINI.md` created.
+- Basic Bot structure (TS, discord.js) set up.
+- Waiting for Discord Token.

@@ -1,0 +1,13 @@
+{
+  "name": "bladebot",
+  "version": "1.0.0",
+  "description": "A Discord bot for scheduling League of Legends custom games.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

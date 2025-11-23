@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits, Partials } from 'discord.js';
+import { Client, GatewayIntentBits, Partials, ActivityType } from 'discord.js';
 import { config } from './config';
 import { commands } from './core/command-registry';
 import { helpCommand } from './commands/help';
@@ -9,9 +9,6 @@ import { deleteCommand } from './commands/delete';
 import { draftCommand } from './commands/draft';
 import { clearCommand } from './commands/clear';
 import { initDatabase } from './db/database';
-// ...
-commands.set(draftCommand.name, draftCommand);
-commands.set(clearCommand.name, clearCommand);
 import { handleReactionAdd, handleReactionRemove } from './events/reaction';
 import { Scheduler } from './core/scheduler';
 
@@ -35,12 +32,14 @@ commands.set(startCommand.name, startCommand);
 commands.set(gamesCommand.name, gamesCommand);
 commands.set(deleteCommand.name, deleteCommand);
 commands.set(draftCommand.name, draftCommand);
+commands.set(clearCommand.name, clearCommand);
 
 let scheduler: Scheduler;
 
 client.once('ready', () => {
   console.log(`Logged in as ${client.user?.tag}!`);
   console.log(`Bot is ready to receive commands with prefix '*'`);
+  client.user?.setActivity('*help', { type: ActivityType.Playing }); // Set bot status
   
   // Start Scheduler
   scheduler = new Scheduler(client);

@@ -21,8 +21,9 @@ Create a Discord bot "Blade Bot" for the "blade*" server to manage League of Leg
 ## Tech Stack
 - **Language:** TypeScript (Node.js)
 - **Library:** discord.js
-- **Database:** SQLite (via `better-sqlite3` or `prisma`) or JSON file for simple persistence of scheduled games (SQLite preferred for robustness).
+- **Database:** SQLite (via `better-sqlite3`) for persistence.
 - **Draft Automation:** Puppeteer for `draftlol.dawe.gg` automation.
+- **Deployment:** Docker (Fly.io) with persistent volume.
 
 ## Implementation Phases
 
@@ -52,14 +53,20 @@ Create a Discord bot "Blade Bot" for the "blade*" server to manage League of Leg
 
 ### Phase 5: Alerts & Polish
 - [ ] Cron jobs or `setTimeout` for reminders (1 hour before, 15 mins before).
+- [x] Deployment Setup (Docker/Fly.io).
 - [ ] Final testing and deployment instructions.
 
 ## Technical Insights & Tips for Gemini
 
 ### Agent Tips
 - **Regular Updates:** Always update this file with new technical discoveries, architectural decisions, or "gotchas" encountered during development.
-- **Environment:** The bot is running on Windows.
-- **Persistence:** SQLite (`better-sqlite3`) is the chosen database.
+- **Commit Strategy:** Commit and push code to GitHub after every significant feature or fix.
+- **Environment:** Development on Windows. Production on Linux (Docker).
+
+### Deployment (Fly.io)
+- **Database:** Uses `DB_PATH` environment variable to point to `/data/bladebot.db`.
+- **Volume:** Requires a persistent volume mounted at `/data`.
+- **Puppeteer:** The Dockerfile installs `google-chrome-stable` and sets `PUPPETEER_EXECUTABLE_PATH`.
 
 ### DraftLol Automation (`draftlol.dawe.gg`)
 - **Method:** Puppeteer (headless browser).
@@ -71,7 +78,6 @@ Create a Discord bot "Blade Bot" for the "blade*" server to manage League of Leg
     - **URL Validation:** The URL changes from `https://draftlol.dawe.gg/` to `https://draftlol.dawe.gg/ID/...` upon room creation.
 
 ## Current State
-- Basic Bot structure operational.
-- `*help`, `*draft`, and `*clear` commands implemented and verified.
-- Draft generation is fully functional using Puppeteer.
-- **Next Focus:** Phase 2 (Scheduling System).
+- All core features (Scheduling, Drafting, Teams) implemented and verified.
+- Dockerfile created for Fly.io deployment.
+- **Next Focus:** Final deployment verification.

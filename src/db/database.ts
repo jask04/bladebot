@@ -1,6 +1,7 @@
 import Database from 'better-sqlite3';
 
-const db: Database.Database = new Database('bladebot.db'); // Removed verbose: console.log to reduce noise
+const dbPath = process.env.DB_PATH || 'bladebot.db';
+const db: Database.Database = new Database(dbPath);
 
 export function initDatabase() {
   const createGamesTable = `

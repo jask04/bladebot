@@ -11,6 +11,7 @@ A Discord bot for scheduling League of Legends custom games, specifically design
 - `*help`: Displays a list of available commands.
 - `*draft`: Automatically generates a new draft lobby on draftlol.dawe.gg and returns the Blue, Red, and Spectator links.
 - `*clear`: Deletes all scheduled games from the database.
+- `*servers`: Lists all servers the bot is currently in. (Jask only)
 
 ## Setup
 1.  Clone the repository.

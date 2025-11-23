@@ -86,6 +86,6 @@ Create a Discord bot "Blade Bot" for the "blade*" server to manage League of Leg
 - **URL Validation:** URL changes from base to `.../ID/...` upon room creation.
 
 ## Current State
-- All core features (Scheduling, Drafting, Teams) implemented and verified.
+- `*help`, `*draft`, `*clear`, and `*servers` commands implemented and verified.
 - Fully deployed on Fly.io with GitHub Actions for CI/CD.
 - **Next Focus:** Final testing and ongoing maintenance.

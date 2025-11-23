@@ -14,8 +14,6 @@ jobs:
       - name: Install and Deploy to Fly.io
         run: |
           curl -L https://fly.io/install.sh | sh
-          export FLYCTL_INSTALL="/github/home/.fly"
-          export PATH="$FLYCTL_INSTALL/bin:$PATH"
-          flyctl deploy --remote-only
+          /github/home/.fly/bin/flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

@@ -15,14 +15,14 @@ Create a Discord bot "Blade Bot" for the "blade*" server to manage League of Leg
     - **Captains:** Vote for 2 captains who will then draft players.
 
 3.  **Draft Integration (Summoner's Rift):**
-    - Automate creation of draft lobbies on `https://draftlol.dawe.gg/` (or similar).
+    - Automate creation of draft lobbies on `https://draftlol.dawe.gg/`.
     - Distribute "Blue Team", "Red Team", and "Spectator" links to the respective captains and channel.
 
 ## Tech Stack
 - **Language:** TypeScript (Node.js)
 - **Library:** discord.js
 - **Database:** SQLite (via `better-sqlite3` or `prisma`) or JSON file for simple persistence of scheduled games (SQLite preferred for robustness).
-- **Draft Automation:** HTTP requests (if API found) or Puppeteer/Playwright for `draftlol.dawe.gg` automation.
+- **Draft Automation:** Puppeteer for `draftlol.dawe.gg` automation.
 
 ## Implementation Phases
 
@@ -30,36 +30,48 @@ Create a Discord bot "Blade Bot" for the "blade*" server to manage League of Leg
 - [x] Initialize Project & Git Repository.
 - [x] specific `GEMINI.md` context setup.
 - [x] Bot configuration (Token, App ID).
-- [ ] Basic "Ping/Pong" command to verify connectivity.
-- [ ] Implement Text Command Handler (Prefix: `*`).
-- [ ] Create `*help` command.
+- [x] Implement Text Command Handler (Prefix: `*`).
+- [x] Create `*help` command.
+- [x] **Action:** User to invite bot to server using OAuth2 URL.
+- [x] Verify `*help` command in Discord (Bot launched).
 
 ### Phase 2: Scheduling System
-- [ ] Command: `/schedule <type> <time>` (e.g., `/schedule type:aram time:20:00`).
-- [ ] Embed message creation with opt-in reactions.
-- [ ] Tracking opt-ins.
-- [ ] Confirmation message when player count reached.
+- [x] Command: `/schedule <type> <time>` (e.g., `/schedule type:aram time:20:00`).
+- [x] Embed message creation with opt-in reactions.
+- [x] Tracking opt-ins.
+- [x] Confirmation message when player count reached.
 
 ### Phase 3: Team Generation
-- [ ] Logic for Random team sorting.
-- [ ] Logic for Captain voting (maybe a pre-game phase where users vote).
+- [x] Logic for Random team sorting.
+- [x] Logic for Captain voting (maybe a pre-game phase where users vote).
 
 ### Phase 4: Draft Integration
-- [ ] Research `draftlol.dawe.gg` "create room" request structure.
-- [ ] Implement automation to generate links.
-- [ ] Command/Trigger to start the draft process.
+- [x] Research `draftlol.dawe.gg` automation.
+- [x] Implement automation to generate links (Puppeteer).
+- [x] Command/Trigger to start the draft process (`*draft`).
 
 ### Phase 5: Alerts & Polish
 - [ ] Cron jobs or `setTimeout` for reminders (1 hour before, 15 mins before).
 - [ ] Final testing and deployment instructions.
 
-## Questions / Clarifications
-- **ARAM Count:** User confirmed custom games on Howling Abyss (2v2, 3v3, 4v4, or 5v5). Minimum threshold set to 4 players.
-- **Draft Tool:** `draftlol.dawe.gg` seems to not have a public API. We will attempt to reverse engineer the creation request or use a headless browser.
-- **Hosting:** Where will this bot run? (Assuming local for now).
+## Technical Insights & Tips for Gemini
+
+### Agent Tips
+- **Regular Updates:** Always update this file with new technical discoveries, architectural decisions, or "gotchas" encountered during development.
+- **Environment:** The bot is running on Windows.
+- **Persistence:** SQLite (`better-sqlite3`) is the chosen database.
+
+### DraftLol Automation (`draftlol.dawe.gg`)
+- **Method:** Puppeteer (headless browser).
+- **Button Selector:** The "Create Room" button is best found by text content ("Create") on `button`, `a`, or `div` elements, as standard selectors are brittle.
+- **Link Extraction:**
+    - The site generates 3 links (Blue, Red, Spectator).
+    - These are found in `input[type="text"]` fields.
+    - **Order:** Input[0] is Blue, Input[1] is Red, Input[2] is Spectator.
+    - **URL Validation:** The URL changes from `https://draftlol.dawe.gg/` to `https://draftlol.dawe.gg/ID/...` upon room creation.
 
 ## Current State
-- Project Initialized.
-- `GEMINI.md` created.
-- Basic Bot structure (TS, discord.js) set up.
-- Waiting for Discord Token.
+- Basic Bot structure operational.
+- `*help`, `*draft`, and `*clear` commands implemented and verified.
+- Draft generation is fully functional using Puppeteer.
+- **Next Focus:** Phase 2 (Scheduling System).

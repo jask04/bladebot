@@ -31,7 +31,7 @@ export class DraftService {
       page.setDefaultNavigationTimeout(60000);
 
       console.log('[Draft Debug] Navigating to draftlol.dawe.gg...');
-      await page.goto('https://draftlol.dawe.gg/', { waitUntil: 'networkidle2' });
+      await page.goto('https://draftlol.dawe.gg/', { waitUntil: 'domcontentloaded', timeout: 60000 });
       console.log(`[Draft Debug] Page loaded. Current URL: ${page.url()}`);
 
       // 2. Wait for the "Create Room" button. 

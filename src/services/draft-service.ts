@@ -13,7 +13,17 @@ export class DraftService {
       console.log('Launching browser for draft creation...');
       browser = await puppeteer.launch({
         headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox'] // Required for some environments (like Docker/Linux)
+        timeout: 60000, // Increase timeout to 60 seconds
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage', // Recommended for Docker environments
+          '--disable-accelerated-2d-canvas',
+          '--no-first-run',
+          '--no-zygote',
+          '--single-process', // Use if --no-sandbox is not enough
+          '--disable-gpu' // Recommended for headless
+        ]
       });
 
       const page = await browser.newPage();

@@ -7,6 +7,7 @@ export const config = {
   CLIENT_ID: process.env.CLIENT_ID || '',
   GUILD_ID: process.env.GUILD_ID || '',
   OWNER_ID: process.env.OWNER_ID || '',
+  DEFAULT_TIMEZONE: process.env.DEFAULT_TIMEZONE || 'UTC',
 };
 
 if (!config.DISCORD_TOKEN) {

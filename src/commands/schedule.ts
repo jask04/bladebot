@@ -2,6 +2,7 @@ import { Message, Client, EmbedBuilder, TextChannel, ActionRowBuilder, ButtonBui
 import { Command } from './command.interface';
 import { DateTime } from 'luxon';
 import { db } from '../db/database';
+import { config } from '../config';
 
 export const scheduleCommand: Command = {
   name: 'schedule',
@@ -164,8 +165,8 @@ export const scheduleCommand: Command = {
     }
     console.log(`[Schedule Debug] Post-prompt finalHour=${finalHour}`);
 
-    // Construct DateTime
-    const now = DateTime.now();
+    // Construct DateTime in the configured timezone
+    const now = DateTime.now().setZone(config.DEFAULT_TIMEZONE);
     let scheduledTime = now.set({
         hour: finalHour,
         minute: minute,

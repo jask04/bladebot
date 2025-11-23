@@ -48,7 +48,7 @@ export const deleteCommand: Command = {
 
     // 4. "Delete" (Cancel) the game
     try {
-        db.prepare('UPDATE games SET status = "cancelled" WHERE id = ?').run(game.id);
+        db.prepare("UPDATE games SET status = 'cancelled' WHERE id = ?").run(game.id);
         console.log(`[Delete Debug] Game ${game.id} status updated to "cancelled"`);
     } catch (dbError) {
         console.error(`[Delete Error] Database update failed for game ${game.id}:`, dbError);

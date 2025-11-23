@@ -27,7 +27,7 @@ export class DraftService {
       });
 
       const page = await browser.newPage();
-      await page.waitForTimeout(3000); // Wait 3 seconds to ensure frame is ready
+      await new Promise(r => setTimeout(r, 3000)); // Wait 3 seconds to ensure frame is ready
       page.setDefaultNavigationTimeout(60000);
 
       console.log('[Draft Debug] Navigating to draftlol.dawe.gg...');

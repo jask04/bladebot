@@ -12,7 +12,7 @@ primary_region = 'sjc'
   app = 'npm start'
 
 [[mounts]]
-  source = 'data'
+  source = 'bladebot_data'
   destination = '/data'
   auto_extend_size_threshold = 80
   auto_extend_size_increment = '1GB'

@@ -48,7 +48,7 @@ export const helpCommand: Command = {
         if (cmd) {
           let description = cmd.description;
           // Add "(jask only)" for owner-restricted commands
-          if (cmd.name === 'draft' || cmd.name === 'clear') {
+          if (cmd.name === 'draft' || cmd.name === 'clear' || cmd.name === 'servers') {
             description += ' (jask only)';
           }
           embed.addFields({ name: `*${cmd.name}`, value: description });

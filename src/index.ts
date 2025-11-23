@@ -8,6 +8,7 @@ import { gamesCommand } from './commands/games';
 import { deleteCommand } from './commands/delete';
 import { draftCommand } from './commands/draft';
 import { clearCommand } from './commands/clear';
+import { serversCommand } from './commands/servers'; // Import new command
 import { initDatabase } from './db/database';
 import { handleReactionAdd, handleReactionRemove } from './events/reaction';
 import { Scheduler } from './core/scheduler';
@@ -33,6 +34,7 @@ commands.set(gamesCommand.name, gamesCommand);
 commands.set(deleteCommand.name, deleteCommand);
 commands.set(draftCommand.name, draftCommand);
 commands.set(clearCommand.name, clearCommand);
+commands.set(serversCommand.name, serversCommand); // Register new command
 
 let scheduler: Scheduler;
 

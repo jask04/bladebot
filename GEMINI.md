@@ -54,7 +54,7 @@ Create a Discord bot "Blade Bot" for the "blade*" server to manage League of Leg
 ### Phase 5: Alerts & Polish
 - [ ] Cron jobs or `setTimeout` for reminders (1 hour before, 15 mins before).
 - [x] Deployment Setup (Docker/Fly.io).
-- [ ] Final testing and deployment instructions.
+- [x] Final testing and verification of all core features.
 
 ## Technical Insights & Tips for Gemini
 
@@ -64,21 +64,28 @@ Create a Discord bot "Blade Bot" for the "blade*" server to manage League of Leg
 - **Environment:** Development on Windows. Production on Linux (Docker).
 
 ### Deployment (Fly.io)
-- **Database:** Uses `DB_PATH` environment variable to point to `/data/bladebot.db`.
-- **Volume:** Requires a persistent volume mounted at `/data`. The volume name in `fly.toml` (source) must match the created volume (e.g., `data` or `bladebot_data`).
-- **Process:** Ensure `fly.toml` process command is simply `npm start`. Remove auto-generated `dbsetup.js` commands.
-- **Puppeteer:** The Dockerfile installs `google-chrome-stable` and sets `PUPPETEER_EXECUTABLE_PATH`.
+- **Database Path:** Uses `DB_PATH` environment variable to point to `/data/bladebot.db`.
+- **Persistent Volume:** Requires a persistent volume mounted at `/data` (e.g., named `bladebot_data`).
+- **Process Command:** `fly.toml` process command must be `npm start`. Avoid auto-generated `dbsetup.js` commands.
+- **Puppeteer Setup:** The Dockerfile installs `google-chrome-stable` and sets `PUPPETEER_EXECUTABLE_PATH`.
+- **Machine Resources (Crucial for Puppeteer):** For reliable Puppeteer operation, ensure the Fly.io machine has sufficient resources. `shared-cpu-2x` with `2GB` RAM or more is recommended for performance and stability, as `shared-cpu-1x` with `1GB` RAM can lead to `TimeoutError` issues.
+- **Manual Scaling:** To suspend the bot, use `fly scale count 0 --app <your-app-name>`. To resume, use `fly scale count 1 --app <your-app-name>`.
+
+### Troubleshooting
+- **SQL Errors (`no such column: "..."`):** Ensure string literals in SQL queries are enclosed in single quotes (e.g., `status = 'scheduled'`), not double quotes (which are for identifiers).
+- **Timezone Parsing (`*schedule` command):** The bot uses the `DEFAULT_TIMEZONE` environment variable (e.g., `America/Los_Angeles`) for `luxon` to interpret time correctly. Without this, time is parsed in the server's UTC timezone, which can lead to "next day" scheduling.
+- **Puppeteer TimeoutErrors:** These often indicate insufficient machine resources or network slowness. Increasing Fly.io machine size (CPU/RAM) and ensuring robust `page.goto` and `waitForSelector` timeouts are critical. Adding a small `await new Promise(r => setTimeout(r, ms));` after `page.newPage()` can sometimes help.
+- **GitHub Actions (`flyctl: command not found`):** If using a manual `flyctl` install, ensure the `flyctl` binary is called with its full path (e.g., `/home/runner/.fly/bin/flyctl`) in the workflow file.
+- **`DeprecationWarning: The ready event...`**: Update `client.once('ready', ...)` to `client.once('clientReady', ...)`.
+- **`ERROR error umounting /data: EBUSY`**: A non-critical warning during machine shutdown for apps with open files on persistent volumes.
 
 ### DraftLol Automation (`draftlol.dawe.gg`)
 - **Method:** Puppeteer (headless browser).
-- **Button Selector:** The "Create Room" button is best found by text content ("Create") on `button`, `a`, or `div` elements, as standard selectors are brittle.
-- **Link Extraction:**
-    - The site generates 3 links (Blue, Red, Spectator).
-    - These are found in `input[type="text"]` fields.
-    - **Order:** Input[0] is Blue, Input[1] is Red, Input[2] is Spectator.
-    - **URL Validation:** The URL changes from `https://draftlol.dawe.gg/` to `https://draftlol.dawe.gg/ID/...` upon room creation.
+- **Button Selector:** "Create" button is found by text content on `button`, `a`, or `div`.
+- **Link Extraction:** Input[0] is Blue, Input[1] is Red, Input[2] is Spectator.
+- **URL Validation:** URL changes from base to `.../ID/...` upon room creation.
 
 ## Current State
 - All core features (Scheduling, Drafting, Teams) implemented and verified.
-- Dockerfile created for Fly.io deployment.
-- **Next Focus:** Final deployment verification.
+- Fully deployed on Fly.io with GitHub Actions for CI/CD.
+- **Next Focus:** Final testing and ongoing maintenance.

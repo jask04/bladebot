@@ -33,7 +33,7 @@ export class Scheduler {
     // better-sqlite3 / SQLite comparison on ISO strings works if format is consistent.
     // Let's fetch all 'scheduled' games and filter in code to be safe with timezones.
     
-    const gamesStmt = db.prepare('SELECT * FROM games WHERE status = "scheduled"');
+    const gamesStmt = db.prepare("SELECT * FROM games WHERE status = 'scheduled'");
     const games = gamesStmt.all() as any[];
 
     for (const game of games) {

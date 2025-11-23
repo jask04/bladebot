@@ -30,23 +30,18 @@ export class DraftService {
       await new Promise(r => setTimeout(r, 3000)); // Wait 3 seconds to ensure frame is ready
       page.setDefaultNavigationTimeout(60000);
 
-      console.log('[Draft Debug] Navigating to draftlol.dawe.gg...');
       await page.goto('https://draftlol.dawe.gg/', { waitUntil: 'domcontentloaded', timeout: 60000 });
-      console.log(`[Draft Debug] Page loaded. Current URL: ${page.url()}`);
 
       // 2. Wait for the "Create Room" button. 
       const createButtonSelector = 'button, a, div[role="button"]'; 
-      console.log(`[Draft Debug] Waiting for create button selector: ${createButtonSelector}`);
       try {
-          await page.waitForSelector(createButtonSelector, { timeout: 10000 }); // Increased timeout for selector
-          console.log('[Draft Debug] Create button selector found.');
+          await page.waitForSelector(createButtonSelector, { timeout: 10000 });
       } catch (e) {
-          console.log(`[Draft Debug] Timeout waiting for generic button selector: ${e}. Continuing to inspect page...`);
+          console.log(`Timeout waiting for generic button selector: ${e}. Continuing to inspect page...`);
       }
 
       // Small delay to ensure hydration
       await new Promise(r => setTimeout(r, 2000));
-      console.log('[Draft Debug] Executing page.evaluate to find and click button...');
 
       // Find the button by text
       const buttonClicked = await page.evaluate(() => {
@@ -66,14 +61,11 @@ export class DraftService {
         }
 
         if (target) {
-          console.log('Found target element:', target.tagName);
           (target as HTMLElement).click();
           return true;
         }
-        console.log('No create button found within page.evaluate.');
         return false;
       });
-      console.log(`[Draft Debug] Button click attempt result: ${buttonClicked}`);
 
       if (!buttonClicked) {
         console.error('Could not find "Create" button.');
@@ -81,12 +73,9 @@ export class DraftService {
       }
 
       // 3. Wait for the draft room to load.
-      console.log('[Draft Debug] Waiting for navigation to new room URL...');
       await page.waitForNavigation({ waitUntil: 'networkidle2' });
-      console.log('[Draft Debug] Navigation complete.');
       
       const url = page.url();
-      console.log(`[Draft Debug] New URL after navigation: ${url}`);
       if (url === 'https://draftlol.dawe.gg/') {
           console.error('Navigation to room failed. URL did not change.');
           return null;
@@ -95,7 +84,6 @@ export class DraftService {
       console.log('Room created at:', url);
 
       // 4. Extract links.
-      console.log('[Draft Debug] Executing page.evaluate to extract links...');
       const links = await page.evaluate(() => {
          const inputs = Array.from(document.querySelectorAll('input[type="text"]')) as HTMLInputElement[];
          
@@ -107,7 +95,6 @@ export class DraftService {
              spectator: urlInputs[2]?.value || '' 
          };
       });
-      console.log(`[Draft Debug] Extracted links: ${JSON.stringify(links)}`);
 
       if (!links.blue || !links.red || !links.spectator) {
           console.warn('Could not scrape specific team links. Returning main URL for all as fallback.');

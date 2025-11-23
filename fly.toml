@@ -19,3 +19,6 @@ primary_region = 'sjc'
   auto_extend_size_limit = '10GB'
 
 [[vm]]
+  memory = '2gb'
+  cpu_kind = 'shared'
+  cpus = 2

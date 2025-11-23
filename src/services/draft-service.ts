@@ -13,21 +13,22 @@ export class DraftService {
       console.log('Launching browser for draft creation...');
       browser = await puppeteer.launch({
         headless: true,
-        timeout: 60000, // Increase timeout to 60 seconds
+        timeout: 60000,
         args: [
           '--no-sandbox',
           '--disable-setuid-sandbox',
-          '--disable-dev-shm-usage', // Recommended for Docker environments
+          '--disable-dev-shm-usage',
           '--disable-accelerated-2d-canvas',
           '--no-first-run',
           '--no-zygote',
-          '--single-process', // Use if --no-sandbox is not enough
-          '--disable-gpu' // Recommended for headless
+          '--single-process',
+          '--disable-gpu'
         ]
       });
 
       const page = await browser.newPage();
-      page.setDefaultNavigationTimeout(60000); // Set default navigation timeout for the page
+      await page.waitForTimeout(3000); // Wait 3 seconds to ensure frame is ready
+      page.setDefaultNavigationTimeout(60000);
 
       console.log('[Draft Debug] Navigating to draftlol.dawe.gg...');
       await page.goto('https://draftlol.dawe.gg/', { waitUntil: 'networkidle2' });

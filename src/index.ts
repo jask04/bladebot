@@ -36,7 +36,7 @@ commands.set(clearCommand.name, clearCommand);
 
 let scheduler: Scheduler;
 
-client.once('ready', () => {
+client.once('clientReady', () => {
   console.log(`Logged in as ${client.user?.tag}!`);
   console.log(`Bot is ready to receive commands with prefix '*'`);
   client.user?.setActivity('*help', { type: ActivityType.Playing }); // Set bot status

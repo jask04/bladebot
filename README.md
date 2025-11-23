@@ -1,6 +1,6 @@
-# Blade Bot
+# blade bot
 
-A Discord bot for scheduling League of Legends custom games, specifically designed for the "blade*" server.
+A Discord bot for scheduling League of Legends custom games
 
 ## Features
 - **Game Scheduling:** Organize custom ARAM or Summoner's Rift matches.

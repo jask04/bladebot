@@ -65,7 +65,8 @@ Create a Discord bot "Blade Bot" for the "blade*" server to manage League of Leg
 
 ### Deployment (Fly.io)
 - **Database:** Uses `DB_PATH` environment variable to point to `/data/bladebot.db`.
-- **Volume:** Requires a persistent volume mounted at `/data`.
+- **Volume:** Requires a persistent volume mounted at `/data`. The volume name in `fly.toml` (source) must match the created volume (e.g., `data` or `bladebot_data`).
+- **Process:** Ensure `fly.toml` process command is simply `npm start`. Remove auto-generated `dbsetup.js` commands.
 - **Puppeteer:** The Dockerfile installs `google-chrome-stable` and sets `PUPPETEER_EXECUTABLE_PATH`.
 
 ### DraftLol Automation (`draftlol.dawe.gg`)

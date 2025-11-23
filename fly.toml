@@ -9,10 +9,10 @@ primary_region = 'sjc'
 [build]
 
 [processes]
-  app = 'node ./dbsetup.js npm start'
+  app = 'npm start'
 
 [[mounts]]
-  source = 'bladebot_data'
+  source = 'data'
   destination = '/data'
   auto_extend_size_threshold = 80
   auto_extend_size_increment = '1GB'

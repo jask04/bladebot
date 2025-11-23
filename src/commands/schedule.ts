@@ -25,6 +25,15 @@ export const scheduleCommand: Command = {
     '*schedule rift 6:30 am'
   ],
   execute: async (message: Message, args: string[], client: Client) => {
+    if (args.length < 2) {
+      await message.reply('Invalid usage. Please use: `*schedule <type> <time>` (e.g., `*schedule aram 8:00`)');
+      return;
+    }
+
+    let type = args[0]?.toLowerCase();
+    let timeStr = args[1]?.toLowerCase();
+    let modifier = args[2]?.toLowerCase(); // Check for separate "am" or "pm" argument
+
     console.log(`[Schedule Debug] Input: type=${type}, timeStr=${timeStr}, modifier=${modifier}`);
 
     if (type !== 'aram' && type !== 'sr' && type !== 'rift') {

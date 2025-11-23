@@ -25,14 +25,7 @@ export const scheduleCommand: Command = {
     '*schedule rift 6:30 am'
   ],
   execute: async (message: Message, args: string[], client: Client) => {
-    if (args.length < 2) {
-      await message.reply('Invalid usage. Please use: `*schedule <type> <time>` (e.g., `*schedule aram 8:00`)');
-      return;
-    }
-
-    const type = args[0]?.toLowerCase();
-    let timeStr = args[1]?.toLowerCase();
-    const modifier = args[2]?.toLowerCase(); // Check for separate "am" or "pm" argument
+    console.log(`[Schedule Debug] Input: type=${type}, timeStr=${timeStr}, modifier=${modifier}`);
 
     if (type !== 'aram' && type !== 'sr' && type !== 'rift') {
       await message.reply('Invalid game type. Please use `aram`, `sr` or `rift`.');
@@ -55,6 +48,7 @@ export const scheduleCommand: Command = {
         timeStr = timeStr!.replace('pm', '');
       }
     }
+    console.log(`[Schedule Debug] After AM/PM extraction: timeStr=${timeStr}, isAm=${isAm}, isPm=${isPm}`);
 
     // Parse HH:mm, H:mm, H, HHMM, HMM
     let hour: number;
@@ -86,10 +80,7 @@ export const scheduleCommand: Command = {
         return;
     }
 
-    if (hour < 0 || hour > 23 || minute < 0 || minute > 59) {
-        await message.reply('Invalid time. Hours must be 0-23 and minutes 0-59.');
-        return;
-    }
+    console.log(`[Schedule Debug] Parsed hour=${hour}, minute=${minute}`);
 
     // Determine if we need to prompt for AM/PM
     let finalHour = hour;
@@ -101,31 +92,22 @@ export const scheduleCommand: Command = {
             finalHour = isPm ? 12 : 0; 
        } else {
             if (isPm && hour < 12) finalHour += 12;
-            if (isAm && hour === 12) finalHour = 0; // Handled by hour===12 check above, but clarity.
-            // if isAm and hour < 12, finalHour = hour (default)
+            if (isAm && hour === 12) finalHour = 0; 
        }
-       // If user provides military time > 12 AND says AM/PM, we might want to respect the number over the suffix or warn.
-       // But let's assume standard logic: if > 12, it's already PM-ish in military. 
        if (hour > 12) {
-           // Just take the hour as is, ignore suffix or treat as error? 
-           // Let's treat as absolute military time.
            finalHour = hour;
        }
 
     } else {
-        // No explicit AM/PM
-        // If hour > 12, it's definitely PM (military time)
         if (hour > 12) {
             finalHour = hour;
-        } else if (hour === 0) { // Military midnight
+        } else if (hour === 0) { 
             finalHour = 0;
         } else {
-            // Ambiguous (1-12), need prompt
-            // UNLESS hour is 12, which in military is 12:00 (noon), but could be 12 AM/PM 12-hour.
-            // We should prompt for 1-12.
             needsPrompt = true;
         }
     }
+    console.log(`[Schedule Debug] Pre-prompt finalHour=${finalHour}, needsPrompt=${needsPrompt}`);
 
     if (needsPrompt) {
         if (!(message.channel instanceof TextChannel)) {
@@ -171,6 +153,7 @@ export const scheduleCommand: Command = {
             return;
         }
     }
+    console.log(`[Schedule Debug] Post-prompt finalHour=${finalHour}`);
 
     // Construct DateTime
     const now = DateTime.now();
@@ -185,7 +168,7 @@ export const scheduleCommand: Command = {
     if (scheduledTime < now) {
         scheduledTime = scheduledTime.plus({ days: 1 });
     }
-
+    console.log(`[Schedule Debug] Final scheduledTime: ${scheduledTime.toISO()} (Local: ${scheduledTime.toFormat('yyyy-MM-dd HH:mm:ss')})`);
     // Create Final Schedule
     let gameTitle = `${type!.toUpperCase()} Custom Game Scheduled!`;
     if (type === 'sr' || type === 'rift') {

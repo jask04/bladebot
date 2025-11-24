@@ -1,46 +1,106 @@
 # Blade Bot
 
-A Discord bot for scheduling League of Legends custom games, specifically designed for the "blade*" server.
+**Blade Bot** is an open-source Discord bot designed to streamline the organization of League of Legends custom games. It handles scheduling, team generation, and even automates the creation of draft lobbies.
 
-## Features
-- **Game Scheduling:** Organize custom ARAM or Summoner's Rift matches.
-- **Team Management:** Randomly assign teams or facilitate captain drafts.
-- **Draft Automation:** Automatically generates [draftlol.dawe.gg](https://draftlol.dawe.gg/) lobbies for Summoner's Rift games.
+## ✨ Features
 
-## Commands
-- `*help`: Displays a list of available commands.
-- `*draft`: Automatically generates a new draft lobby on draftlol.dawe.gg and returns the Blue, Red, and Spectator links.
-- `*clear`: Deletes all scheduled games from the database.
-- `*servers`: Lists all servers the bot is currently in. (Jask only)
+*   **📅 Easy Scheduling:** Schedule games for specific times (supports timezones). Users simply react with 👍 to sign up.
+*   **⚖️ Team Balancing:**
+    *   **Random:** Automatically shuffles players into balanced teams (handles uneven counts like 2v3).
+    *   **Captains:** Facilitates a voting phase where players elect two captains to draft teams.
+*   **🤖 Automated Drafts:** For Summoner's Rift, the bot uses a headless browser to create a lobby on [draftlol.dawe.gg](https://draftlol.dawe.gg/) and privately distributes Blue/Red/Spectator links.
+*   **🛠️ Management Tools:** Commands to view upcoming games, manually start them, or clear the schedule.
 
-## Setup
-1.  Clone the repository.
-2.  Install dependencies: `npm install`.
-3.  Configure environment variables in `.env` (DISCORD_TOKEN, CLIENT_ID, OWNER_ID).
-4.  Run the bot: `npm start` (or `npm run dev` for development).
+## 🚀 Getting Started
 
-## Tech Stack
-- Node.js (TypeScript)
-- discord.js
-- Puppeteer (for draft automation)
-- SQLite
+### Prerequisites
 
-## Fly.io Management Commands
+*   **Node.js** (v18 or higher)
+*   **npm**
+*   **Discord Bot Token:** Create one at the [Discord Developer Portal](https://discord.com/developers/applications).
+    *   *Intents required:* `Guilds`, `GuildMessages`, `MessageContent`, `GuildMessageReactions`.
 
-This section provides a quick reference for common `flyctl` commands used to manage the Blade Bot deployment on Fly.io.
+### Installation
 
-*   **`fly launch`**: Initializes a new Fly.io app, creates `fly.toml`, and guides through initial setup.
-*   **`fly deploy`**: Builds and deploys the bot to Fly.io. Run this after any code changes.
-*   **`fly status`**: Shows the current status of your application, including running machines, allocated resources, and recent deployments.
-*   **`fly logs -a bladebot`**: Streams logs from your running bot to your terminal. Useful for debugging.
-*   **`fly secrets set KEY=VALUE`**: Sets environment variables (secrets) for your application. Example: `fly secrets set DISCORD_TOKEN=your_token CLIENT_ID=your_client_id OWNER_ID=your_user_id`.
-*   **`fly volumes list`**: Lists all persistent volumes associated with your Fly.io account.
-*   **`fly volumes create <name> --size 1 --region <region>`**: Creates a new persistent volume. Replace `<name>` and `<region>`. Example: `fly volumes create bladebot_data --size 1 --region sjc`.
-*   **`fly volumes delete <name>`**: Deletes a persistent volume. Use with caution.
-*   **`fly scale count <number> --app bladebot`**: Manually scales your bot's machines up or down.
-    *   `fly scale count 0 --app bladebot`: Stops the bot (suspends it).
-    *   `fly scale count 1 --app bladebot`: Starts the bot.
-*   **`fly ssh console`**: Provides an SSH connection to your running machine, allowing you to debug inside the container.
-*   **`fly apps destroy bladebot`**: **Deletes your entire Fly.io application**, including all machines and volumes. **Use with extreme caution!**
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/yourusername/bladebot.git
+    cd bladebot
+    ```
 
-Remember to replace `bladebot` with your actual app name if you chose a different one.
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+3.  **Configure Environment:**
+    Copy `.env.example` to `.env` and fill in your details.
+    ```bash
+    cp .env.example .env
+    ```
+    *   `DISCORD_TOKEN`: Your bot's token.
+    *   `CLIENT_ID`: Your bot's Application ID.
+    *   `OWNER_ID`: (Optional) Your user ID for owner-only commands.
+    *   `DEFAULT_TIMEZONE`: (Optional) Your local timezone (e.g., `America/Los_Angeles`).
+
+4.  **Run the bot:**
+    ```bash
+    npm run dev
+    ```
+
+## 🐳 Docker Deployment
+
+This project includes a `Dockerfile` optimized for running Puppeteer (Chromium).
+
+1.  **Build the image:**
+    ```bash
+    docker build -t bladebot .
+    ```
+
+2.  **Run the container:**
+    ```bash
+    docker run -d \
+      --env-file .env \
+      -v $(pwd)/data:/data \
+      bladebot
+    ```
+    *Note: The `-v` flag mounts a volume for the SQLite database so data persists.*
+
+## ☁️ Deployment on Fly.io
+
+The project is ready for [Fly.io](https://fly.io/).
+
+1.  **Initialize App:**
+    ```bash
+    fly launch --no-deploy
+    ```
+    *   Copy the contents of `fly.toml.example` to your new `fly.toml` if needed, ensuring you update the app name.
+
+2.  **Create Volume:**
+    ```bash
+    fly volumes create bladebot_data --size 1
+    ```
+
+3.  **Set Secrets:**
+    ```bash
+    fly secrets set DISCORD_TOKEN=... CLIENT_ID=... 
+    ```
+
+4.  **Deploy:**
+    ```bash
+    fly deploy
+    ```
+
+## 📝 Commands
+
+*   `*schedule <type> <time>`: Schedule a game (Types: `aram`, `sr`).
+*   `*start`: Start a scheduled game immediately (Reply to the schedule message).
+*   `*games`: List upcoming games.
+*   `*delete`: Cancel a game (Reply to the schedule message).
+*   `*draft`: Manually generate a draft lobby link (Admin only).
+*   `*clear`: Wipe the database (Admin only).
+*   `*help`: Show all commands.
+
+## 📄 License
+
+Distributed under the MIT License. See `LICENSE` for more information.

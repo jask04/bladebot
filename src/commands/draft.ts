@@ -1,18 +1,17 @@
-import { Message, Client } from 'discord.js';
+import { Message, Client, PermissionsBitField } from 'discord.js';
 import { Command } from './command.interface';
 import { DraftService } from '../services/draft-service';
-import { config } from '../config'; // Import the config
 
 export const draftCommand: Command = {
   name: 'draft',
   description: 'Uses Puppeteer to create a custom draft room on draftlol.dawe.gg and returns the Blue, Red, and Spectator links.',
-  details: 'Launches a headless browser instance to interact with draftlol.dawe.gg. It automatically clicks "Create Room" and scrapes the generated Blue, Red, and Spectator links.\n\n**(Jask Only):** This command is restricted to the bot owner.',
+  details: 'Launches a headless browser instance to interact with draftlol.dawe.gg. It automatically clicks "Create Room" and scrapes the generated Blue, Red, and Spectator links.\n\n**(Admin Only):** This command requires Administrator permissions.',
   usage: '*draft',
   examples: ['*draft'],
   execute: async (message: Message, args: string[], client: Client) => {
-    // Owner check
-    if (message.author.id !== config.OWNER_ID) {
-      await message.reply('only jask can use it');
+    // Permission check
+    if (!message.member?.permissions.has(PermissionsBitField.Flags.Administrator)) {
+      await message.reply('You need Administrator permissions to use this command.');
       return;
     }
 

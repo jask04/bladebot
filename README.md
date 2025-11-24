@@ -48,49 +48,6 @@
     npm run dev
     ```
 
-## 🐳 Docker Deployment
-
-This project includes a `Dockerfile` optimized for running Puppeteer (Chromium).
-
-1.  **Build the image:**
-    ```bash
-    docker build -t bladebot .
-    ```
-
-2.  **Run the container:**
-    ```bash
-    docker run -d \
-      --env-file .env \
-      -v $(pwd)/data:/data \
-      bladebot
-    ```
-    *Note: The `-v` flag mounts a volume for the SQLite database so data persists.*
-
-## ☁️ Deployment on Fly.io
-
-The project is ready for [Fly.io](https://fly.io/).
-
-1.  **Initialize App:**
-    ```bash
-    fly launch --no-deploy
-    ```
-    *   Copy the contents of `fly.toml.example` to your new `fly.toml` if needed, ensuring you update the app name.
-
-2.  **Create Volume:**
-    ```bash
-    fly volumes create bladebot_data --size 1
-    ```
-
-3.  **Set Secrets:**
-    ```bash
-    fly secrets set DISCORD_TOKEN=... CLIENT_ID=... 
-    ```
-
-4.  **Deploy:**
-    ```bash
-    fly deploy
-    ```
-
 ## 📝 Commands
 
 *   `*schedule <type> <time>`: Schedule a game (Types: `aram`, `sr`).
